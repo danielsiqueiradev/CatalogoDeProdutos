@@ -61,8 +61,8 @@ class AppBD:
             self.abrirConexao()
             cursor = self.connection.cursor()
             postgres_insert_query = """ INSERT INTO PRODUTO 
-          (codigo, NOME, PRECO) VALUES (%s,%s,%s)"""
-            record_to_insert = (codigo, nome, preco)
+          (codigo, NOME, PRECO, precovenda) VALUES (%s,%s,%s,%s)"""
+            record_to_insert = (codigo, nome, preco, precovenda)
             cursor.execute(postgres_insert_query, record_to_insert)
             self.connection.commit()
             count = cursor.rowcount
@@ -80,11 +80,10 @@ class AppBD:
     # -----------------------------------------------------------------------------
     # Atualizar Produto
     # -----------------------------------------------------------------------------
-    def atualizarDados(self, codigo, nome, preco):
+    def atualizarDados(self, codigo, nome, preco, precovenda):
         try:
             self.abrirConexao()
             cursor = self.connection.cursor()
-
             print("Registro Antes da Atualização ")
             sql_select_query = """select * from public.PRODUTO 
             where CODIGO = %s"""
@@ -93,7 +92,8 @@ class AppBD:
             print(record)
             # Atualizar registro
             sql_update_query = """Update public.PRODUTO set NOME = %s, 
-            PRECO = %s where CODIGO = %s"""
+            PRECO = %s, precovenda = (preco+(preco*0.1))
+             where CODIGO = %s"""
             cursor.execute(sql_update_query, (nome, preco, codigo))
             self.connection.commit()
             count = cursor.rowcount
@@ -124,8 +124,6 @@ class AppBD:
             sql_delete_query = """Delete from public.PRODUTO 
             where CODIGO = %s"""
             cursor.execute(sql_delete_query, (codigo,))
-
-
             self.connection.commit()
             count = cursor.rowcount
             print(count, "Registro excluído com sucesso! ")
