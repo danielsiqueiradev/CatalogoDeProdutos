@@ -100,15 +100,18 @@ class PrincipalBD:
                 codigo = item[0]
                 nome = item[1]
                 preco = item[2]
+                precovenda = item[3]
                 print("Códig0 = ", codigo)
                 print("Nome = ", nome)
-                print("Preço  = ", preco, "\n")
+                print("Preço  = ", preco)
+                print("Preço de Venda  = ", precovenda, "\n")
 
                 self.treeProdutos.insert('', 'end',
                                          iid=self.iid,
                                          values=(codigo,
                                                  nome,
-                                                 preco))
+                                                 preco,
+                                                 precovenda))
 
                 self.iid = self.iid + 1
                 self.id = self.id + 1
@@ -128,10 +131,13 @@ class PrincipalBD:
             print('nome', nome)
             preco = float(self.txtPreco.get())
             print('preco', preco)
+            # precovenda = float(self.txtPrecoVenda.get())
+            # print('preco', precovenda)
+            calcprecovenda = preco+preco*0.1
             print('Leitura dos Dados com Sucesso!')
         except:
             print('Não foi possível ler os dados.')
-        return codigo, nome, preco, preco+preco*0.1
+        return codigo, nome, preco, calcprecovenda
 
     # -----------------------------------------------------------------------------
     # Cadastrar Produto
@@ -160,8 +166,8 @@ class PrincipalBD:
     def fAtualizarProduto(self):
         try:
             print("************ dados dsponíveis ***********")
-            codigo, nome, preco = self.fLerCampos()
-            self.objBD.atualizarDados(codigo, nome, preco)
+            codigo, nome, preco, precovenda = self.fLerCampos()
+            self.objBD.atualizarDados(codigo, nome, preco, precovenda)
             # recarregar dados na tela
             self.treeProdutos.delete(*self.treeProdutos.get_children())
             self.carregarDadosIniciais()
@@ -176,7 +182,7 @@ class PrincipalBD:
     def fExcluirProduto(self):
         try:
             print("************ dados dsponíveis ***********")
-            codigo, nome, preco = self.fLerCampos()
+            codigo, nome, preco, precovenda = self.fLerCampos()
             self.objBD.excluirDados(codigo)
             # recarregar dados na tela
             self.treeProdutos.delete(*self.treeProdutos.get_children())
